@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "First-Run Auth Guard",
+    "version": "1.0",
+    "description": "On first run show username/password. If correct continue, otherwise close current window. Stores auth in chrome.storage.local.",
+    "permissions": [
+        "storage",
+        "tabs",
+        "windows"
+    ],
+    "host_permissions": [],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "icons/icon-16.png",
+        "36": "icons/icon-36.png",
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png",
+        "256": "icons/icon-256.png"
+    },
+    "action": {
+        "default_title": "Auth Guard (click to open login)",
+        "default_popup": ""
+    }
+}

@@ -1,0 +1,392 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Digital Numbers', 'Orbitron', monospace;
+    background: linear-gradient(135deg, #0c1445 0%, #1a1a2e 50%, #16213e 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+}
+
+@font-face {
+    font-family: 'Digital7';
+    src: url('assets/digital-7.ttf') format('truetype');
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.font-digital {
+    font-family: 'Digital7', monospace;
+}
+
+/* Animated background particles */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: float 6s infinite linear;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-10px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 40px;
+    width: fit-content;
+    background: rgba(15, 15, 35, 0.8);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: containerGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes containerGlow {
+    0% {
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            0 0 20px rgba(0, 255, 255, 0.1);
+    }
+
+    100% {
+        box-shadow:
+            0 25px 50px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2),
+            0 0 40px rgba(0, 255, 255, 0.3);
+    }
+}
+
+.clock-display {
+    margin-bottom: 30px;
+}
+
+.time {
+    position: relative;
+    font-size: 8vw;
+    font-weight: 700;
+    color: #00ffff;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.ampm {
+    position: absolute;
+    top: 25%;
+    right: 2%;
+    font-size: 2vw;
+}
+
+.date {
+    font-size: 1vw;
+    color: #a0a0a0;
+    margin-bottom: 20px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+.controls {
+    display: none;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 25px;
+    color: #00ffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+}
+
+.control-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.control-btn.active {
+    background: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+}
+
+.timezone-info {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
+    gap: 20px;
+}
+
+.timezone-info span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.format-indicator {
+    background: rgba(0, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+/* Seconds display */
+.seconds {
+    font-size: 8vw;
+    color: #00ffff;
+    margin-left: 10px;
+    animation: secondsTick 1s ease-in-out infinite;
+}
+
+@keyframes secondsTick {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0.3;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 30px 20px;
+    }
+
+    .timezone-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .control-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Loading animation */
+.loading {
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Digital segments effect */
+.segment-display {
+    position: relative;
+    display: inline-block;
+}
+
+.segment-display::before {
+    content: "88:88:88";
+    position: absolute;
+    color: rgba(0, 255, 255, 0.1);
+    z-index: -1;
+}
+
+
+
+/* global class */
+.text-white {
+    color: #ffffff;
+}
+
+
+
+
+
+/* Google Apps Menu Button */
+.google-apps-menu {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.apps-button {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.apps-button:hover {
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.apps-button i {
+    width: 24px;
+    height: 24px;
+    color: #00ffff;
+}
+
+/* Dropdown Menu */
+.apps-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 380px;
+    background: rgba(15, 15, 35, 0.95);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    padding: 25px;
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
+.apps-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.apps-dropdown h3 {
+    color: #00ffff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.google-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.google-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    gap: 10px;
+}
+
+.google-app:hover {
+    background: rgba(0, 255, 255, 0.15);
+    border-color: rgba(0, 255, 255, 0.4);
+    color: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+}
+
+.google-app i {
+    width: 32px;
+    height: 32px;
+    color: currentColor;
+}
+
+.google-app span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.add-more-apps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1rem;
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.5rem 0;
+    cursor: pointer;
+}
+
+.add-more-apps span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00ffff;
+    font-family: inherit;
+}

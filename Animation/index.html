@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container loading">
+        <div class="clock-display">
+            <div class="segment-display">
+                <div class="font-digital time" id="time">
+                    <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds" class="seconds">00</span>
+                </div>
+            </div>
+            <div class="date" id="date">Loading...</div>
+        </div>
+    </div>
+
+    <div class="google-apps-menu">
+        <div class="apps-button" id="appsButton">
+            <i data-lucide="grip" class="text-white"></i>
+        </div>
+
+        <div class="apps-dropdown" id="appsDropdown">
+            <h3>Google Apps</h3>
+            <div id="apps-list" class="google-apps-grid"></div>
+            <div class="add-more-apps" id="add-more-apps">
+                <i data-lucide="plus" class="text-white"></i>
+                <span>Create</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+    <script src="libs/lucide.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
+
+    <script src="script.js" defer></script>
+</body>
+
+</html>

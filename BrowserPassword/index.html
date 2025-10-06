@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Set the password</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="icons/icon-48.png" />
+</head>
+
+<body>
+    <div class="floating-shapes" aria-hidden="true">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container-box">
+
+        <div class="container">
+            <h1 class="title">Enter Password</h1>
+            <p class="subtitle">Set up your secure credentials</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" placeholder="Enter your username" autocomplete="username" />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Enter your password"
+                            autocomplete="current-password" />
+                    </div>
+                </div>
+
+                <button id="submitBtn" type="submit" class="create-btn">Login</button>
+                <p id="msg" class="msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
