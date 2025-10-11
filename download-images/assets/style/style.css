@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+    margin: 0;
+    width: 420px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.container h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4;
+}
+
+#fetchBtn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #6366f1, #8b5cf6);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#fetchBtn:hover {
+    opacity: 0.9;
+}
+
+.status-text {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #555;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.grid-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+}
+
+.download-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+}
+
+.download-btn:hover {
+    border-color: transparent;
+    background: linear-gradient(to right, #6366f1, #8b5cf6);
+    color: #fff;
+}

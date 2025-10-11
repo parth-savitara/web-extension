@@ -19,125 +19,74 @@ class EnhancedDigitalClock {
         this.hoursElement = document.getElementById('hours');
         this.minutesElement = document.getElementById('minutes');
         this.secondsElement = document.getElementById('seconds');
-        this.timezoneElement = document.getElementById('timezone');
         this.googleAppsList = document.getElementById('apps-list');
     }
 
     loadAppsFromStorage() {
         const storedApps = localStorage.getItem('appsList');
         if (storedApps) {
-            return JSON.parse(storedApps);
+            try {
+                return JSON.parse(atob(storedApps));
+            } catch (error) {
+                console.error("Failed to load apps from storage:", error);
+            }
         }
+
         // Default apps list
         return [
-            {
-                name: 'Search',
-                url: 'https://google.com',
-                icon: 'search'
-            },
-            {
-                name: 'Gmail',
-                url: 'https://mail.google.com',
-                icon: 'mail'
-            },
-            {
-                name: 'Drive',
-                url: 'https://drive.google.com',
-                icon: 'cloud'
-            },
-            {
-                name: 'Docs',
-                url: 'https://docs.google.com',
-                icon: 'file-text'
-            },
-            {
-                name: 'Sheets',
-                url: 'https://sheets.google.com',
-                icon: 'table'
-            },
-            {
-                name: 'Slides',
-                url: 'https://slides.google.com',
-                icon: 'presentation'
-            },
-            {
-                name: 'Meet',
-                url: 'https://meet.google.com',
-                icon: 'video'
-            },
-            {
-                name: 'Calendar',
-                url: 'https://calendar.google.com',
-                icon: 'calendar-days'
-            },
-            {
-                name: 'Photos',
-                url: 'https://photos.google.com',
-                icon: 'image'
-            },
-            {
-                name: 'Keep',
-                url: 'https://keep.google.com',
-                icon: 'clipboard'
-            },
-            {
-                name: 'Translate',
-                url: 'https://translate.google.com',
-                icon: 'languages'
-            },
-            {
-                name: 'Maps',
-                url: 'https://maps.google.com',
-                icon: 'map'
-            },
-            {
-                name: 'YouTube',
-                url: 'https://youtube.com',
-                icon: 'play'
-            },
-            {
-                name: 'Play Store',
-                url: 'https://play.google.com',
-                icon: 'smartphone'
-            },
-            {
-                name: 'Tasks',
-                url: 'https://tasks.google.com',
-                icon: 'check-square'
-            },
-            {
-                name: 'Forms',
-                url: 'https://forms.google.com',
-                icon: 'file-text'
-            },
-            {
-                name: 'Blogger',
-                url: 'https://www.blogger.com',
-                icon: 'pencil'
-            },
-            {
-                name: 'Firebase',
-                url: 'https://firebase.google.com',
-                icon: 'zap'
-            }
+            { name: 'Search', url: 'https://google.com', icon: 'search', type: 'default' },
+            { name: 'Gmail', url: 'https://mail.google.com', icon: 'mail', type: 'default' },
+            { name: 'Drive', url: 'https://drive.google.com', icon: 'cloud', type: 'default' },
+            { name: 'Docs', url: 'https://docs.google.com', icon: 'file-text', type: 'default' },
+            { name: 'Sheets', url: 'https://sheets.google.com', icon: 'table', type: 'default' },
+            { name: 'Slides', url: 'https://slides.google.com', icon: 'presentation', type: 'default' },
+            { name: 'Meet', url: 'https://meet.google.com', icon: 'video', type: 'default' },
+            { name: 'Calendar', url: 'https://calendar.google.com', icon: 'calendar-days', type: 'default' },
+            { name: 'Photos', url: 'https://photos.google.com', icon: 'image', type: 'default' },
+            { name: 'Keep', url: 'https://keep.google.com', icon: 'clipboard', type: 'default' },
+            { name: 'Translate', url: 'https://translate.google.com', icon: 'languages', type: 'default' },
+            { name: 'Maps', url: 'https://maps.google.com', icon: 'map', type: 'default' },
+            { name: 'YouTube', url: 'https://youtube.com', icon: 'play', type: 'default' },
+            { name: 'Play Store', url: 'https://play.google.com', icon: 'smartphone', type: 'default' },
+            { name: 'Tasks', url: 'https://tasks.google.com', icon: 'check-square', type: 'default' },
+            { name: 'Forms', url: 'https://forms.google.com', icon: 'file-text', type: 'default' },
+            { name: 'Blogger', url: 'https://www.blogger.com', icon: 'pencil', type: 'default' },
+            { name: 'Firebase', url: 'https://firebase.google.com', icon: 'zap', type: 'default' }
         ];
     }
 
     saveAppsToStorage() {
-        localStorage.setItem('appsList', JSON.stringify(this.appsList));
+        const encrypted = btoa(JSON.stringify(this.appsList));
+        localStorage.setItem('appsList', encrypted);
     }
 
     initGoogleApps() {
-        this.googleAppsList.innerHTML = ''; // Clear the list before rendering
-        this.appsList.forEach(app => {
+        this.googleAppsList.innerHTML = '';
+        this.appsList.forEach((app, index) => {
+            const removeBtn = app.type === 'custom'
+                ? `<button class="remove-app" data-index="${index}"><i data-lucide="trash" color="white"></i></button>`
+                : '';
+
             this.googleAppsList.innerHTML += `
-            <a href="${app.url}" class="text-white google-app">
-                    <i data-lucide="${app.icon}"></i>
-                    <span>${app.name}</span>
-                </a>
-            `;
+                        <a href="${app.url}" class="text-white google-app">
+                            <i data-lucide="${app.icon}"></i>
+                            <span>${app.name}</span>
+                            ${removeBtn}
+                        </a>
+                    `;
         });
         lucide.createIcons();
+
+        // Remove functionality
+        this.googleAppsList.querySelectorAll('.remove-app').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const index = parseInt(btn.dataset.index, 10);
+                this.appsList.splice(index, 1);
+                this.saveAppsToStorage();
+                this.initGoogleApps();
+            });
+        });
     }
 
     initDropdown() {
@@ -145,24 +94,17 @@ class EnhancedDigitalClock {
         const appsDropdown = document.getElementById('appsDropdown');
         const dropdownOverlay = document.getElementById('dropdownOverlay');
 
-        // Toggle dropdown
-        appsButton.addEventListener('click', function (e) {
+        appsButton.addEventListener('click', (e) => {
             e.stopPropagation();
             appsDropdown.scrollTo({ behavior: 'instant', top: 0 });
             const isActive = appsDropdown.classList.contains('active');
-
-            if (isActive) {
-                closeDropdown();
-            } else {
-                openDropdown();
-            }
+            if (isActive) closeDropdown();
+            else openDropdown();
         });
 
-        // Close dropdown when clicking outside
         dropdownOverlay.addEventListener('click', closeDropdown);
 
-        // Close dropdown when clicking outside anywhere
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', (e) => {
             if (!appsButton.contains(e.target) && !appsDropdown.contains(e.target)) {
                 closeDropdown();
             }
@@ -207,10 +149,11 @@ class EnhancedDigitalClock {
                 this.appsList.push({
                     icon: iconName,
                     name: name,
-                    url: url
+                    url: url,
+                    type: 'custom'
                 });
-                this.saveAppsToStorage(); // Save the updated list to local storage
-                this.initGoogleApps(); // Re-render the apps list
+                this.saveAppsToStorage();
+                this.initGoogleApps();
             }
         });
     }
@@ -222,37 +165,24 @@ class EnhancedDigitalClock {
 
     updateClock() {
         const now = new Date();
-
         let hours = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
 
-        // Format hours based on 12/24 hour preference
-        let displayHours = hours;
+        let displayHours = this.is24Hour ? hours : hours % 12 || 12;
 
-        if (!this.is24Hour) {
-            displayHours = hours % 12 || 12;
-        }
-
-        // Update time display with leading zeros
         this.hoursElement.textContent = displayHours.toString().padStart(2, '0');
         this.minutesElement.textContent = minutes.toString().padStart(2, '0');
         this.secondsElement.textContent = seconds.toString().padStart(2, '0');
 
-        // Update date
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         this.dateElement.textContent = now.toLocaleDateString('en-US', options);
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => new EnhancedDigitalClock());
 
-// Handle fullscreen change events
+// Fullscreen button handling (optional)
 document.addEventListener('fullscreenchange', () => {
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     if (fullscreenBtn) {
